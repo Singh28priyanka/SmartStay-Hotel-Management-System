@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Date_Of_Birth_Plausible</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISBLANK(Date_of_Birth__c)), Date_of_Birth__c &lt; ADDMONTHS(TODAY(), -1440))</errorConditionFormula>
+    <errorDisplayField>Date_of_Birth__c</errorDisplayField>
+    <errorMessage>Date of Birth cannot be more than 120 years ago.</errorMessage>
+</ValidationRule>

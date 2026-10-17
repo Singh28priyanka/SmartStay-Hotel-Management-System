@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sent to the Hotel Manager role when a reservation is cancelled (Flow: SmartStay - Reservation Cancellation).</description>
+    <encodingKey>UTF-8</encodingKey>
+    <name>SmartStay Reservation Cancelled</name>
+    <style>none</style>
+    <subject>Cancelled: {!Reservation__c.Name} for room {!Reservation__c.Room_Number__c}</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

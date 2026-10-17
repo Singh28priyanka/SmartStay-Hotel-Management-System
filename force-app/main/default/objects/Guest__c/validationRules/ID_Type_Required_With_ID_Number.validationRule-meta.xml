@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>ID_Type_Required_With_ID_Number</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(ID_Type__c, ""), NOT(ISBLANK(ID_Number__c)))</errorConditionFormula>
+    <errorDisplayField>ID_Type__c</errorDisplayField>
+    <errorMessage>Select the ID Type for this ID Number.</errorMessage>
+</ValidationRule>

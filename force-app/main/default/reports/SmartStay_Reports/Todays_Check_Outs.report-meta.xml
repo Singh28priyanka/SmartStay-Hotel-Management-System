@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Reservation__c$Name</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Guest_Name__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Room_Number__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Check_In_Date__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Estimated_Amount__c</field>
+    </columns>
+    <description>Dashboard source: non-cancelled reservations with Check-Out Date = today.</description>
+    <filter>
+        <criteriaItems>
+            <column>Reservation__c$Check_Out_Date__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>TODAY</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Reservation__c$Reservation_Status__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>notEqual</operator>
+            <value>Cancelled</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Reservation__c$Reservation_Status__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Today's Check-Outs</name>
+    <reportType>SmartStay_Reservations__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Reservation__c$Check_In_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

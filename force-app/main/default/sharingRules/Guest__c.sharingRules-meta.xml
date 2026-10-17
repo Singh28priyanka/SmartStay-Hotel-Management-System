@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>Front_Desk_Edits_Hotel_Guests</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>OWD is Private. Every receptionist can read and edit every guest profile.</description>
+        <label>Front Desk Edits Hotel Guests</label>
+        <sharedTo>
+            <role>SmartStay_Receptionist</role>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinates>SmartStay_CEO</roleAndSubordinates>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>Accounts_Reads_Hotel_Guests</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Accounts can read guest records for billing. Field-level security hides identification fields.</description>
+        <label>Accounts Reads Hotel Guests</label>
+        <sharedTo>
+            <role>SmartStay_Accounts</role>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinates>SmartStay_CEO</roleAndSubordinates>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

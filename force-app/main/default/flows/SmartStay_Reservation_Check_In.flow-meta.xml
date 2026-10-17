@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <customErrors>
+        <name>Room_Update_Failed</name>
+        <label>Room Update Failed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>The guest could not be checked in because the room status could not be updated. Details: {!$Flow.FaultMessage}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <description>FLOW 2. When Reservation Status changes to Checked-In, sets the related Room Status to Occupied. Apex (ReservationStatusService) has already validated the check-in in the before-save phase: correct dates, room not under Maintenance or Cleaning, no other guest in the room. The update is skipped when the room is already Occupied. If the room cannot be updated, the fault path raises an error so the check-in is rolled back instead of leaving the room out of sync.</description>
+    <environments>Default</environments>
+    <interviewLabel>SmartStay - Reservation Check-In {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SmartStay - Reservation Check-In</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Mark_Room_Occupied</name>
+        <label>Mark Room Occupied</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <faultConnector>
+            <targetReference>Room_Update_Failed</targetReference>
+        </faultConnector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Room__c</elementReference>
+            </value>
+        </filters>
+        <filters>
+            <field>Room_Status__c</field>
+            <operator>NotEqualTo</operator>
+            <value>
+                <stringValue>Occupied</stringValue>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Room_Status__c</field>
+            <value>
+                <stringValue>Occupied</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Room__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Mark_Room_Occupied</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Reservation_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Checked-In</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Reservation_Status__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Reservation__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

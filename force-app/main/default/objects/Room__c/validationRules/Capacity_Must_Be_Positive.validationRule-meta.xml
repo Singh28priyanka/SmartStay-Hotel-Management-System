@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Capacity_Must_Be_Positive</fullName>
+    <active>true</active>
+    <errorConditionFormula>OR(ISBLANK(Capacity__c), Capacity__c &lt;= 0)</errorConditionFormula>
+    <errorDisplayField>Capacity__c</errorDisplayField>
+    <errorMessage>Capacity is required and must be at least 1 guest.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Staff_Mobile_Number_Format</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(REGEX(Mobile__c, "^[+]?[0-9 ()-]{10,20}$"))</errorConditionFormula>
+    <errorDisplayField>Mobile__c</errorDisplayField>
+    <errorMessage>Enter a valid mobile number: 10-20 digits, optionally starting with +, spaces/dashes/brackets allowed.</errorMessage>
+</ValidationRule>

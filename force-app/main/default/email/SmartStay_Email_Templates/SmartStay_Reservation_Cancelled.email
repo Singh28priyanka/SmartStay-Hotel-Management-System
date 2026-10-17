@@ -1,0 +1,16 @@
+Hello,
+
+Reservation {!Reservation__c.Name} has been cancelled.
+
+Guest: {!Reservation__c.Guest_Name__c}
+Room: {!Reservation__c.Room_Number__c} ({!Reservation__c.Room_Type__c})
+Check-In Date: {!Reservation__c.Check_In_Date__c}
+Check-Out Date: {!Reservation__c.Check_Out_Date__c}
+Estimated Amount: {!Reservation__c.Estimated_Amount__c}
+Cancelled by: {!Reservation__c.LastModifiedBy}
+
+The room's dates are free for new bookings. Room status was recalculated automatically.
+
+Open the reservation: {!Reservation__c.Link}
+
+SmartStay Hotel Management System

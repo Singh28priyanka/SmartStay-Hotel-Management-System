@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Room__c</fullName>
+    <deleteConstraint>Restrict</deleteConstraint>
+    <label>Room</label>
+    <lookupFilter>
+        <active>true</active>
+        <errorMessage>Rooms under Maintenance cannot be booked.</errorMessage>
+        <filterItems>
+            <field>Room__c.Room_Status__c</field>
+            <operation>notEqual</operation>
+            <value>Maintenance</value>
+        </filterItems>
+        <infoMessage>Rooms under Maintenance are hidden.</infoMessage>
+        <isOptional>true</isOptional>
+    </lookupFilter>
+    <referenceTo>Room__c</referenceTo>
+    <relationshipLabel>Reservations</relationshipLabel>
+    <relationshipName>Reservations</relationshipName>
+    <required>true</required>
+    <trackHistory>true</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Lookup</type>
+</CustomField>

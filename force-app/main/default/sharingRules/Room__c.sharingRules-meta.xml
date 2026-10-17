@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>Housekeeping_Edits_Rooms</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>OWD is Public Read Only. Housekeeping gets record edit access; field-level security limits them to Room Status.</description>
+        <label>Housekeeping Edits Rooms</label>
+        <sharedTo>
+            <role>SmartStay_Housekeeping</role>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinates>SmartStay_CEO</roleAndSubordinates>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

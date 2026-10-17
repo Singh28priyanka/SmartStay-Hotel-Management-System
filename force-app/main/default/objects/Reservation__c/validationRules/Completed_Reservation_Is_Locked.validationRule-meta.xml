@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Completed_Reservation_Is_Locked</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISNEW()),
+    OR(ISPICKVAL(PRIORVALUE(Reservation_Status__c), "Checked-Out"),
+       ISPICKVAL(PRIORVALUE(Reservation_Status__c), "Cancelled")),
+    OR(ISCHANGED(Room__c), ISCHANGED(Guest__c), ISCHANGED(Check_In_Date__c),
+       ISCHANGED(Check_Out_Date__c), ISCHANGED(Number_of_Guests__c)))</errorConditionFormula>
+    <errorMessage>Checked-Out and Cancelled reservations are history: room, guest, dates and guest count cannot be changed.</errorMessage>
+</ValidationRule>

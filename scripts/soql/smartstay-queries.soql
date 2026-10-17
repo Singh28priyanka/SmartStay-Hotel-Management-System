@@ -1,0 +1,1 @@
+SELECT Name, Room__r.Name, Room__r.Room_Type__c, Room__r.Room_Rate__c, Guest__r.First_Name__c, Guest__r.Last_Name__c, Check_In_Date__c, Check_Out_Date__c, Reservation_Status__c, Estimated_Amount__c FROM Reservation__c ORDER BY Check_In_Date__c

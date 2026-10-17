@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>In_House_Guests</fullName>
+    <columns>NAME</columns>
+    <columns>Guest_Name__c</columns>
+    <columns>Room_Number__c</columns>
+    <columns>Check_In_Date__c</columns>
+    <columns>Check_Out_Date__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Reservation_Status__c</field>
+        <operation>equals</operation>
+        <value>Checked-In</value>
+    </filters>
+    <label>In-House Guests (Checked-In)</label>
+</ListView>

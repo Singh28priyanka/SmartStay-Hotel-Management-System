@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Arrival_Fixed_After_Check_In</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(ISPICKVAL(PRIORVALUE(Reservation_Status__c), "Checked-In"),
+    OR(ISCHANGED(Room__c), ISCHANGED(Guest__c), ISCHANGED(Check_In_Date__c)))</errorConditionFormula>
+    <errorMessage>After check-in the room, guest and Check-In Date cannot be changed. Only the Check-Out Date can be extended.</errorMessage>
+</ValidationRule>

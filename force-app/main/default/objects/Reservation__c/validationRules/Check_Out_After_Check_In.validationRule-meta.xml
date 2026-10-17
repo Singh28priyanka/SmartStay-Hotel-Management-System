@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_Out_After_Check_In</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(NOT(ISBLANK(Check_In_Date__c)), NOT(ISBLANK(Check_Out_Date__c)), Check_Out_Date__c &lt;= Check_In_Date__c)</errorConditionFormula>
+    <errorDisplayField>Check_Out_Date__c</errorDisplayField>
+    <errorMessage>Check-Out Date must be later than Check-In Date.</errorMessage>
+</ValidationRule>

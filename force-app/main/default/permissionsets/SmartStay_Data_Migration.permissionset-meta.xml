@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>SmartStay_Historical_Data_Load</name>
+    </customPermissions>
+    <description>Temporary: lets an administrator load past-dated reservations and record past check-ins/check-outs. Remove the assignment after the data load.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>SmartStay Data Migration</label>
+</PermissionSet>

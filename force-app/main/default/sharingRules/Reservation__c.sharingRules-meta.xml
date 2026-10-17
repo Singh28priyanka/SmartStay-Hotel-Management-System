@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingOwnerRules>
+        <fullName>Front_Desk_Edits_Hotel_Reservations</fullName>
+        <accessLevel>Edit</accessLevel>
+        <description>OWD is Private. Every receptionist can read and edit every hotel reservation, whoever created it (shift handover).</description>
+        <label>Front Desk Edits Hotel Reservations</label>
+        <sharedTo>
+            <role>SmartStay_Receptionist</role>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinates>SmartStay_CEO</roleAndSubordinates>
+        </sharedFrom>
+    </sharingOwnerRules>
+    <sharingOwnerRules>
+        <fullName>Accounts_Reads_Hotel_Reservations</fullName>
+        <accessLevel>Read</accessLevel>
+        <description>Accounts can read all hotel reservations for billing and revenue reports. Edit is not possible: their permission set is read-only.</description>
+        <label>Accounts Reads Hotel Reservations</label>
+        <sharedTo>
+            <role>SmartStay_Accounts</role>
+        </sharedTo>
+        <sharedFrom>
+            <roleAndSubordinates>SmartStay_CEO</roleAndSubordinates>
+        </sharedFrom>
+    </sharingOwnerRules>
+</SharingRules>

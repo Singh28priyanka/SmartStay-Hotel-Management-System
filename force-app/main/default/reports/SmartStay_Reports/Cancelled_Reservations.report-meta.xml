@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Reservation__c$Name</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Guest_Name__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Room_Number__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Room_Type__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Check_In_Date__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Check_Out_Date__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$Estimated_Amount__c</field>
+    </columns>
+    <columns>
+        <field>Reservation__c$LastModifiedDate</field>
+    </columns>
+    <description>REPORT 2. Every cancelled reservation with the dates it had blocked and when it was cancelled.</description>
+    <filter>
+        <criteriaItems>
+            <column>Reservation__c$Reservation_Status__c</column>
+            <columnToColumn>false</columnToColumn>
+            <isUnlocked>true</isUnlocked>
+            <operator>equals</operator>
+            <value>Cancelled</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Cancelled Reservations</name>
+    <reportType>SmartStay_Reservations__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>Reservation__c$Check_In_Date__c</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>Reservation__c$Check_In_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

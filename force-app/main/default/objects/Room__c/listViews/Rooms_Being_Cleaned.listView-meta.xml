@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Rooms_Being_Cleaned</fullName>
+    <columns>NAME</columns>
+    <columns>Room_Type__c</columns>
+    <columns>Floor__c</columns>
+    <columns>Assigned_Housekeeper__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Room_Status__c</field>
+        <operation>equals</operation>
+        <value>Cleaning</value>
+    </filters>
+    <label>Rooms Being Cleaned</label>
+</ListView>

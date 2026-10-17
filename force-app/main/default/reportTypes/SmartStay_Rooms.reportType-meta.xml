@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Room__c</baseObject>
+    <category>other</category>
+    <deployed>true</deployed>
+    <description>One row per room, for room status counts.</description>
+    <label>SmartStay Rooms</label>
+    <sections>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Name</field>
+            <table>Room__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Room_Type__c</field>
+            <table>Room__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Floor__c</field>
+            <table>Room__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Room_Status__c</field>
+            <table>Room__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Room_Rate__c</field>
+            <table>Room__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Capacity__c</field>
+            <table>Room__c</table>
+        </columns>
+        <masterLabel>Rooms</masterLabel>
+    </sections>
+</ReportType>

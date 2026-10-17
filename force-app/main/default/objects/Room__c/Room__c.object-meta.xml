@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>Room_Compact</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>A bookable hotel room. Room Status reflects today's operational state.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <externalSharingModel>Private</externalSharingModel>
+    <label>Room</label>
+    <nameField>
+        <displayFormat>RM-{0000}</displayFormat>
+        <label>Room Number</label>
+        <startingNumber>1</startingNumber>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Rooms</pluralLabel>
+    <searchLayouts>
+        <lookupDialogsAdditionalFields>Room_Type__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Room_Status__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Floor__c</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Room_Type__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Room_Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Floor__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>Read</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

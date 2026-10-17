@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Allows loading historical (past-dated) reservations and recording past check-ins/check-outs. Assign only to the administrator who loads sample or migrated data; never to front-desk users.</description>
+    <isLicensed>false</isLicensed>
+    <label>SmartStay Historical Data Load</label>
+</CustomPermission>

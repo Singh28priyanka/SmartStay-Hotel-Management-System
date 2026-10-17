@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Send_Confirmation_Email</name>
+        <label>Send Confirmation Email</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Mark_Email_Sent</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Mark_Email_Failed</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Guest__r.Email__c</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <elementReference>EmailSubject</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>ConfirmationBody</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <description>FLOW 1. When a Confirmed reservation is created, emails the guest a confirmation with reservation number, room number and type, dates and estimated amount, then stamps Confirmation Email Status (Sent or Failed). Entry requires the status to be blank, so a reservation is never emailed twice; data loads can set it to Suppressed to skip the email. An email failure does not undo the booking.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>EmailSubject</name>
+        <dataType>String</dataType>
+        <expression>"SmartStay booking confirmed: " &amp; {!$Record.Name}</expression>
+    </formulas>
+    <interviewLabel>SmartStay - Reservation Confirmation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SmartStay - Reservation Confirmation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Mark_Email_Failed</name>
+        <label>Mark Email Failed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Confirmation_Email_Status__c</field>
+            <value>
+                <stringValue>Failed</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Reservation__c</object>
+    </recordUpdates>
+    <recordUpdates>
+        <name>Mark_Email_Sent</name>
+        <label>Mark Email Sent</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </filters>
+        <inputAssignments>
+            <field>Confirmation_Email_Status__c</field>
+            <value>
+                <stringValue>Sent</stringValue>
+            </value>
+        </inputAssignments>
+        <object>Reservation__c</object>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Send_Confirmation_Email</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Reservation_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Confirmed</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Confirmation_Email_Status__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Reservation__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>ConfirmationBody</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Dear {!$Record.Guest__r.First_Name__c},&lt;/p&gt;
+&lt;p&gt;Thank you for choosing SmartStay. Your reservation is confirmed.&lt;/p&gt;
+&lt;table cellpadding="4"&gt;
+&lt;tr&gt;&lt;td&gt;&lt;b&gt;Reservation Number&lt;/b&gt;&lt;/td&gt;&lt;td&gt;{!$Record.Name}&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;b&gt;Room&lt;/b&gt;&lt;/td&gt;&lt;td&gt;{!$Record.Room__r.Name} ({!$Record.Room_Type__c})&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;b&gt;Check-In Date&lt;/b&gt;&lt;/td&gt;&lt;td&gt;{!$Record.Check_In_Date__c}&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;b&gt;Check-Out Date&lt;/b&gt;&lt;/td&gt;&lt;td&gt;{!$Record.Check_Out_Date__c}&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;b&gt;Nights&lt;/b&gt;&lt;/td&gt;&lt;td&gt;{!$Record.Number_of_Nights__c}&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;b&gt;Guests&lt;/b&gt;&lt;/td&gt;&lt;td&gt;{!$Record.Number_of_Guests__c}&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;&lt;b&gt;Estimated Amount&lt;/b&gt;&lt;/td&gt;&lt;td&gt;{!$Record.Estimated_Amount__c}&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;p&gt;The estimated amount is based on the nightly rate at the time of booking. Taxes and extras are settled at check-out.&lt;/p&gt;
+&lt;p&gt;We look forward to welcoming you.&lt;br/&gt;SmartStay Front Desk&lt;/p&gt;</text>
+    </textTemplates>
+</Flow>

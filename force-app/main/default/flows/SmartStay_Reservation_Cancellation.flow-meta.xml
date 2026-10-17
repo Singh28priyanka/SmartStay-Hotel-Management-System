@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Notify_Hotel_Manager</name>
+        <label>Notify Hotel Manager</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>Reservation__c.Reservation_Cancelled_Manager_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Recalculate_Room_Status</targetReference>
+        </connector>
+        <faultConnector>
+            <targetReference>Recalculate_Room_Status</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <actionCalls>
+        <name>Recalculate_Room_Status</name>
+        <label>Recalculate Room Status</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>RoomStatusService</actionName>
+        <actionType>apex</actionType>
+        <faultConnector>
+            <targetReference>Cancellation_Failed</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>roomId</name>
+            <value>
+                <elementReference>$Record.Room__c</elementReference>
+            </value>
+        </inputParameters>
+    </actionCalls>
+    <apiVersion>65.0</apiVersion>
+    <customErrors>
+        <name>Cancellation_Failed</name>
+        <label>Cancellation Failed</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>The reservation could not be cancelled because the room status could not be updated. Details: {!$Flow.FaultMessage}</errorMessage>
+            <isFieldError>false</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <description>FLOW 5. When Reservation Status changes to Cancelled: (1) emails the Hotel Manager role using the Reservation Cancelled email alert; an email failure does not block the cancellation; (2) calls the Apex action Recalculate Room Status, which checks the room's other reservations and keeps Maintenance and Cleaning, so the room is freed only when nothing else needs it. Cancelled reservations are ignored by the overlap check, so their dates become bookable immediately. If the recalculation fails, the cancellation is rolled back.</description>
+    <environments>Default</environments>
+    <interviewLabel>SmartStay - Reservation Cancellation {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SmartStay - Reservation Cancellation</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Notify_Hotel_Manager</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Reservation_Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Cancelled</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Reservation_Status__c</field>
+            <operator>IsChanged</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Reservation__c</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

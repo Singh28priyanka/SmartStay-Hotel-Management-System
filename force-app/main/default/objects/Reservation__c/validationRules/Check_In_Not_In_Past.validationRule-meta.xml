@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Check_In_Not_In_Past</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(OR(ISNEW(), ISCHANGED(Check_In_Date__c)), NOT(ISBLANK(Check_In_Date__c)),
+    Check_In_Date__c &lt; TODAY(), NOT($Permission.SmartStay_Historical_Data_Load))</errorConditionFormula>
+    <errorDisplayField>Check_In_Date__c</errorDisplayField>
+    <errorMessage>Check-In Date cannot be in the past.</errorMessage>
+</ValidationRule>

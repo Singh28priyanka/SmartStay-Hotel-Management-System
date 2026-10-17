@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>65.0</apiVersion>
+    <customErrors>
+        <name>Block_Inactive_Staff</name>
+        <label>Block Inactive Staff</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>{!Get_Assigned_Staff.Name} is inactive and cannot be assigned new work. Choose an active housekeeper.</errorMessage>
+            <fieldSelection>Assigned_Housekeeper__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <customErrors>
+        <name>Block_Wrong_Department</name>
+        <label>Block Wrong Department</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <customErrorMessages>
+            <errorMessage>{!Get_Assigned_Staff.Name} works in {!Get_Assigned_Staff.Department__c}. Only Housekeeping staff can be assigned to rooms.</errorMessage>
+            <fieldSelection>Assigned_Housekeeper__c</fieldSelection>
+            <isFieldError>true</isFieldError>
+        </customErrorMessages>
+    </customErrors>
+    <decisions>
+        <name>Is_Staff_Eligible</name>
+        <label>Is Staff Eligible?</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Eligible</defaultConnectorLabel>
+        <rules>
+            <name>Staff_Is_Inactive</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Assigned_Staff.Active__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Block_Inactive_Staff</targetReference>
+            </connector>
+            <label>Staff Is Inactive</label>
+        </rules>
+        <rules>
+            <name>Staff_Not_Housekeeping</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Get_Assigned_Staff.Department__c</leftValueReference>
+                <operator>NotEqualTo</operator>
+                <rightValue>
+                    <stringValue>Housekeeping</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Block_Wrong_Department</targetReference>
+            </connector>
+            <label>Staff Not Housekeeping</label>
+        </rules>
+    </decisions>
+    <description>FLOW 6. Runs before a Room is saved when its Assigned Housekeeper is set or changed. Blocks the assignment if the staff member is inactive or not in Housekeeping. Existing assignments are not re-checked when someone is later deactivated; the Active Staff list view and the lookup filter help managers reassign that work.</description>
+    <environments>Default</environments>
+    <interviewLabel>SmartStay - Staff Assignment Guard {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>SmartStay - Staff Assignment Guard</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <name>Get_Assigned_Staff</name>
+        <label>Get Assigned Staff</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Is_Staff_Eligible</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Id</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>$Record.Assigned_Housekeeper__c</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Hotel_Staff__c</object>
+        <queriedFields>Id</queriedFields>
+        <queriedFields>Name</queriedFields>
+        <queriedFields>Active__c</queriedFields>
+        <queriedFields>Department__c</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Assigned_Staff</targetReference>
+        </connector>
+        <filterFormula>AND(NOT(ISBLANK({!$Record.Assigned_Housekeeper__c})), OR(ISNEW(), ISCHANGED({!$Record.Assigned_Housekeeper__c})))</filterFormula>
+        <object>Room__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

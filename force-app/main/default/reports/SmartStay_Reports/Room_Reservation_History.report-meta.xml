@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Room__c.Reservations__r$Name</field>
+    </columns>
+    <columns>
+        <field>Room__c.Reservations__r$Guest_Name__c</field>
+    </columns>
+    <columns>
+        <field>Room__c.Reservations__r$Check_In_Date__c</field>
+    </columns>
+    <columns>
+        <field>Room__c.Reservations__r$Check_Out_Date__c</field>
+    </columns>
+    <columns>
+        <field>Room__c.Reservations__r$Reservation_Status__c</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Room__c.Reservations__r$Estimated_Amount__c</field>
+    </columns>
+    <description>REPORT 3. Each room with all of its reservations (rooms without bookings are listed too).</description>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Room__c$Name</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Room__c$Room_Type__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Room-wise Reservation History</name>
+    <reportType>SmartStay_Rooms_with_Reservations__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>Room__c.Reservations__r$Check_In_Date__c</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>Room__c.Reservations__r$Check_In_Date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>
