@@ -1,6 +1,7 @@
 // Runs every query in SmartStayQueries against the sample data and prints the results.
 // sf apex run --file scripts/apex/soql-demo.apex
-// Output contains fictional sample data only; guest identification fields are never printed.
+// Output contains fictional sample data only. Guest contact and identification fields are queried
+// but never written to the debug log.
 
 Room__c sampleRoom = [SELECT Id, Name FROM Room__c WHERE Name = 'RM-0001' LIMIT 1];
 Guest__c sampleGuest = [SELECT Id, Full_Name__c FROM Guest__c WHERE Last_Name__c = 'Sharma' LIMIT 1];
@@ -35,7 +36,7 @@ for (Reservation__c r : roomWithChildren.Reservations__r) {
 
 System.debug('=== Query 6 (child-to-parent): reservations from today with room and guest fields');
 for (Reservation__c r : SmartStayQueries.getReservationsWithRoomAndGuest(today)) {
-    System.debug(r.Name + ' / ' + r.Room__r.Name + ' ' + r.Room__r.Room_Type__c + ' @ ' + r.Room__r.Room_Rate__c + ' / ' + r.Guest__r.First_Name__c + ' ' + r.Guest__r.Last_Name__c + ' <' + r.Guest__r.Email__c + '>');
+    System.debug(r.Name + ' / ' + r.Room__r.Name + ' ' + r.Room__r.Room_Type__c + ' @ ' + r.Room__r.Room_Rate__c + ' / ' + r.Guest__r.First_Name__c + ' ' + r.Guest__r.Last_Name__c);
 }
 
 System.debug('=== Query 7 (parent-to-child): guest with reservations');

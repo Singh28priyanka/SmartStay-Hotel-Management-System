@@ -7,7 +7,9 @@
 | Platform | Salesforce Developer Edition (API version 65.0), Lightning Experience |
 | Org used for results | Developer Edition org `00Dg800000OcyW7EAJ`, time zone Asia/Kolkata |
 | Results captured on | 17 October 2026 |
-| Apex test run | `707g800000pUcPh` — 81 tests, 81 passed, 0 failed, org-wide coverage 95% |
+| Apex test run | `707g800000pUcPh` — 76 test methods, 76 passed, 0 failed, org-wide coverage 95% |
+| Live rule verification | `scripts/apex/verify-business-rules.apex` — 19 of 19 checks passed (changes rolled back) |
+| Check-only deployment | `0Afg800000HpRpBCAV` — 155/155 components, 76/76 tests |
 
 All people, phone numbers, email addresses (`@example.com`) and identity numbers in this project are fictional.
 
@@ -592,18 +594,18 @@ SELECT Id, Name, Check_In_Date__c, Check_Out_Date__c, Reservation_Status__c,
 FROM Reservation__c WHERE Check_In_Date__c >= :fromDate
 WITH USER_MODE ORDER BY Check_In_Date__c ASC LIMIT 200
 ```
-From 17/10/2026:
+From 17/10/2026 (contact fields are queried but not printed to the debug log):
 ```
-RES-0011 / RM-0009 Single @ 2500.00 / Nikhil Desai <nikhil.desai@example.com>
-RES-0010 / RM-0003 Double @ 3800.00 / Lakshmi Menon <lakshmi.menon@example.com>
-RES-0018 / RM-0004 Double @ 3800.00 / Sneha Reddy <sneha.reddy@example.com>
-RES-0019 / RM-0010 Double @ 3800.00 / Kabir Malhotra <kabir.malhotra@example.com>
-RES-0016 / RM-0010 Double @ 3800.00 / Ananya Iyer <ananya.iyer@example.com>
-RES-0014 / RM-0006 Deluxe @ 5500.00 / Diya Patel <diya.patel@example.com>
-RES-0012 / RM-0001 Single @ 2500.00 / Zoya Khan <zoya.khan@example.com>
-RES-0013 / RM-0001 Single @ 2500.00 / Aarav Sharma <aarav.sharma@example.com>
-RES-0015 / RM-0008 Suite @ 9000.00 / Rohan Verma <rohan.verma@example.com>
-RES-0017 / RM-0011 Deluxe @ 5800.00 / Vikram Singh <vikram.singh@example.com>
+RES-0011 / RM-0009 Single @ 2500.00 / Nikhil Desai
+RES-0010 / RM-0003 Double @ 3800.00 / Lakshmi Menon
+RES-0018 / RM-0004 Double @ 3800.00 / Sneha Reddy
+RES-0019 / RM-0010 Double @ 3800.00 / Kabir Malhotra
+RES-0016 / RM-0010 Double @ 3800.00 / Ananya Iyer
+RES-0014 / RM-0006 Deluxe @ 5500.00 / Diya Patel
+RES-0012 / RM-0001 Single @ 2500.00 / Zoya Khan
+RES-0013 / RM-0001 Single @ 2500.00 / Aarav Sharma
+RES-0015 / RM-0008 Suite @ 9000.00 / Rohan Verma
+RES-0017 / RM-0011 Deluxe @ 5800.00 / Vikram Singh
 ```
 
 **Query 7 — parent-to-child from Guest.** Output: `GST-0001 Aarav Sharma -> 2 reservations`.
@@ -795,8 +797,9 @@ Confirmation emails were suppressed for sample bookings (`Confirmation_Email_Sta
 ## 18. Test cases and actual results
 
 Command: `sf apex run test --test-level RunLocalTests --code-coverage --result-format human --wait 30`
-Result on 17/10/2026, test run `707g800000pUcPh`: **81 run, 81 passed, 0 failed**, execution time 18.5 s, org-wide
-coverage **95%**.
+Result on 17/10/2026, test run `707g800000pUcPh`: **76 test methods, 76 passed, 0 failed**, execution time 18.5 s,
+org-wide coverage **95%**. (The CLI summary prints "Tests Ran: 81" because it also counts the 5 `@TestSetup`
+methods; the number of test methods is 76.)
 
 | Class | Coverage |
 |---|---|
@@ -839,13 +842,45 @@ coverage **95%**.
 | SOQL | 8 tests in `SmartStayQueriesTest`, run as a Hotel Manager user |
 | Security | 6 tests in `SmartStaySecurityTest` (section 15) |
 
+### Live verification in the org
+
+`scripts/apex/verify-business-rules.apex` replays the rules against the loaded sample data and then rolls everything
+back (no data changes, no emails). Result on 17/10/2026: **19 passed, 0 failed**.
+
+| # | Check | Result |
+|---|---|---|
+| 01 | Valid booking: rate 3,800 × 2 nights = 7,600; Flow 1 sets Confirmation Email Status = Sent | PASS |
+| 02 | Overlapping booking rejected ("Room RM-0010 is already booked from …") | PASS |
+| 03–04 | Check-out before / on check-in date rejected | PASS |
+| 05 | Guests above capacity rejected | PASS |
+| 06 | Maintenance room rejected | PASS |
+| 07 | Past check-in rejected | PASS |
+| 08 | Zero guests rejected | PASS |
+| 09 | Arrival on the previous guest's check-out date allowed | PASS |
+| 10 | Date change into an existing stay rejected | PASS |
+| 11 | Cancelled dates can be booked again | PASS |
+| 12 | Confirmed → Checked-Out rejected | PASS |
+| 13 | Check-in before arrival date rejected | PASS |
+| 14 | Check-in: room Reserved → Occupied (Flow 2) | PASS |
+| 15 | Occupied room cannot be marked Available (Flow 4) | PASS |
+| 16 | Check-out: room → Cleaning (Flow 3); housekeeping ready → Available | PASS |
+| 17 | Cancellation: room Reserved → Available (Flow 5) | PASS |
+| 18 | Inactive staff assignment rejected (Flow 6) | PASS |
+| 19 | 100 bookings in one DML saved with 3 SOQL queries; in-batch conflict rejected | PASS |
+
+Note: Auto Numbers consumed inside a rolled-back transaction are not reused, so new records created after running this
+script continue from a higher number.
+
+A requirement-by-requirement audit with evidence is in
+[SmartStay_Evaluation_Audit.md](SmartStay_Evaluation_Audit.md).
+
 ### What Apex tests do not cover
 
 | Behaviour | Why not | How it was verified |
 |---|---|---|
 | Email actually delivered to an inbox | Salesforce never sends email from tests | Demo step: book a room for a guest with your own email address (Setup → Deliverability must be *All email*) |
 | Concurrent bookings by two users | A test is a single transaction | By design (row lock, section 13) |
-| Reports and dashboards | Not testable in Apex | All 10 reports run through the Reports REST API; results in section 16 |
+| Reports and dashboards | Not testable in Apex | All 10 reports run, and all 9 dashboard components return data after refresh, through the Analytics REST API; results in section 16 |
 | Page layouts, list views, quick actions, app navigation | UI configuration | Manual check in the app (screenshots, section 19) |
 | Midnight schedule actually firing | Scheduling is time-based | Job *SmartStay Daily Room Status Refresh* is scheduled in the org; the batch logic is tested |
 
@@ -862,7 +897,7 @@ Management System) and insert them here:
 6. A Check-In followed by the room showing *Occupied*.
 7. The three dashboards after Refresh.
 8. Setup → Roles (hierarchy view) and one permission set's object settings.
-9. Setup → Apex Test Execution showing 81 passed.
+9. Setup → Apex Test Execution showing all 76 test methods passed.
 10. Flow Builder view of one Flow (e.g. Room Availability).
 
 ## 20. Setup and deployment
@@ -916,7 +951,7 @@ Notes learned during deployment to this org:
 SmartStay meets the brief with native Salesforce features: a clear data model with required lookups and protected
 deletion, layered validation (required fields → validation rules → Apex for cross-record rules), six focused Flows,
 bulk-safe and lock-protected Apex for overlap prevention, least-privilege security verified with real users, and
-reports and dashboards on live data. All 81 Apex tests pass with 95% coverage.
+reports and dashboards on live data. All 76 Apex test methods pass with 95% coverage, and 19 of 19 live rule checks pass in the org.
 
 Possible next steps:
 

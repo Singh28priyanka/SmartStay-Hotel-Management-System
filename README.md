@@ -81,7 +81,13 @@ is optional.
    sf apex run --file scripts/apex/soql-demo.apex
    ```
 
-8. Open the org, then App Launcher → **SmartStay Hotel Management System**:
+8. Replay every business rule against the sample data (prints PASS/FAIL, then rolls back all changes):
+
+   ```bash
+   sf apex run --file scripts/apex/verify-business-rules.apex
+   ```
+
+9. Open the org, then App Launcher → **SmartStay Hotel Management System**:
 
    ```bash
    sf org open
@@ -91,4 +97,5 @@ To receive the guest confirmation email in a demo, create a guest whose Email is
 room for them. Email deliverability (Setup → Deliverability) must be **All email**.
 
 See [docs/SmartStay_Project_Documentation.md](docs/SmartStay_Project_Documentation.md) for the full design, test
-results and interview notes.
+results and interview notes, and [docs/SmartStay_Evaluation_Audit.md](docs/SmartStay_Evaluation_Audit.md) for a
+requirement-by-requirement audit with evidence.

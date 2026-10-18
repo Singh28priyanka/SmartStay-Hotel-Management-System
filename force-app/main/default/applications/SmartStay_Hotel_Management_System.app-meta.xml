@@ -4,7 +4,7 @@
         <headerColor>#0C4A6E</headerColor>
         <logo>SmartStay_Logo</logo>
         <logoVersion>1</logoVersion>
-        <shouldOverrideOrgTheme>false</shouldOverrideOrgTheme>
+        <shouldOverrideOrgTheme>true</shouldOverrideOrgTheme>
     </brand>
     <description>SmartStay: rooms, guests, reservations, hotel staff, reports and dashboards for front desk, housekeeping, accounts and management.</description>
     <formFactors>Small</formFactors>
